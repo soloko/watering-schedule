@@ -1,11 +1,7 @@
 const {expect} = require('chai')
-const {getPlants} = require('../app')
+const {getPlants, getWateringGroups} = require('../app')
 const plantsArray = getPlants()
-const plant = {
-  name: 'test plant',
-  water_after: '21 days',
-  extraKey: 'one more thing'
-}
+const wateringGroups = getWateringGroups()
 
 describe('App', () => {
   it('`getPlants` should return an array from parsed JSON of plants', () => {
@@ -15,12 +11,20 @@ describe('App', () => {
     for (let i = 0; i < plantsArray.length; i++){
       expect(plantsArray[i]).to.be.an('object').that.includes.all.keys('name', 'water_after')
     }
-    expect(plant).to.include.all.keys('name', 'water_after')
   })
+  it('`getWateringGroups` will return a hash table with plants grouped by days for watering', () => {
+    expect(wateringGroups[3]).to.include('Bell Pepper Plant')
+    expect(wateringGroups[7]).to.not.include('Jade')
+    expect(wateringGroups[2]).to.be.an('array')
+  })
+
   xit('When time between watering is divisible by 7, day to be watered is monday', () => {
 
   })
   xit('All plants must be watered on first Monday', () => {
+
+  })
+  xit('Plants cannot have `water_after` days of 0 or 1', () => {
 
   })
 })
