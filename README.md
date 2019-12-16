@@ -3,8 +3,11 @@ A program tool for plant watering schedule.
 
 
 ## Getting Started
-`npm install`
-`npm start`
+```
+npm install
+npm start
+```
+Wanted to make sure I was using minimal dependencies.
 With nodemon, if any changes are made to the given JSON file, the schedule will automatically print again.
 
 
