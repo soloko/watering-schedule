@@ -1,9 +1,11 @@
 const {expect} = require('chai')
-const {getPlants, getWateringGroups} = require('../app')
+const {getPlants, getWateringGroups, createSchedule} = require('../app')
 const plantsArray = getPlants()
-const wateringGroups = getWateringGroups()
+const wateringGroups = getWateringGroups([...plantsArray])
+const schedule = createSchedule(wateringGroups)
 
 describe('App', () => {
+  const dates = Object.keys(schedule)
   it('`getPlants` should return an array from parsed JSON of plants', () => {
     expect(plantsArray).to.be.an('array')
   })
@@ -18,13 +20,24 @@ describe('App', () => {
     expect(wateringGroups[2]).to.be.an('array')
   })
 
-  xit('When time between watering is divisible by 7, day to be watered is monday', () => {
-
+  it('When time between watering is divisible by 7, day to be watered is monday', () => {
+    const sevenDayClub = wateringGroups['7']
+    dates.forEach(date => {
+      if (String(date).startsWith('Mon')){
+        for (let i = 0; i < sevenDayClub.length; i++){
+          expect(schedule[date]).to.include(sevenDayClub[i])
+        }
+      }
+    })
   })
-  xit('All plants must be watered on first Monday', () => {
-
+  it('All plants must be watered on first Monday', () => {
+    expect(schedule['Mon Dec 23 2019']).to.have.lengthOf(plantsArray.length)
   })
-  xit('Plants cannot have `water_after` days of 0 or 1', () => {
-
+  it('Plants must not be watered on Saturdays or Sundays', () => {
+    dates.forEach(date => {
+      if (String(date).startsWith('Sat' || 'Sun')){
+        expect(schedule[date]).to.be.an('array').that.has.lengthOf(0)
+      }
+    })
   })
 })
